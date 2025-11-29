@@ -5,11 +5,17 @@ document.addEventListener('DOMContentLoaded', carregarOrdens);
 
 // Função de Listagem
 async function carregarOrdens() {
+    // Coleta valores dos filtros
     const busca = document.getElementById('buscaTitulo').value;
+    const setor = document.getElementById('buscaSetor').value;
+    const prioridade = document.getElementById('filtroPrioridade').value;
     const status = document.getElementById('filtroStatus').value;
     
+    // Monta URL com query params
     let url = `${API_URL}?`;
     if (busca) url += `busca=${busca}&`;
+    if (setor) url += `setor=${setor}&`;
+    if (prioridade) url += `prioridade=${prioridade}&`;
     if (status) url += `status=${status}`;
 
     try {
@@ -28,6 +34,10 @@ async function carregarOrdens() {
                 .replace(/[\u0300-\u036f]/g, "")
                 .replace(/\s+/g, '-');
 
+            // Formata data do prazo para exibição (DD/MM/YYYY), se existir
+            const prazoFormatado = os.prazo ? new Date(os.prazo).toLocaleDateString('pt-BR') : 'Não definido';
+
+            // Prepara JSON seguro para o botão editar
             const osJson = JSON.stringify(os).replace(/'/g, "&#39;");
 
             const card = `
@@ -38,8 +48,10 @@ async function carregarOrdens() {
                             <small class="${corStatus} fs-6">${os.status.toUpperCase()}</small>
                         </h5>
                         <p class="card-text text-muted mb-1">${os.descricao}</p>
+                        <hr class="my-2">
                         <p class="mb-1"><strong>Setor:</strong> ${os.setor}</p>
                         <p class="mb-1"><strong>Prioridade:</strong> ${os.prioridade}</p>
+                        <p class="mb-1"><strong>Prazo:</strong> ${prazoFormatado}</p>
                         <p class="mb-1"><strong>Valor:</strong> R$ ${os.valor}</p>
                         <div class="mt-2 text-end">
                             <button class="btn btn-sm btn-outline-primary" onclick='editarOrdem(${osJson})'>Editar</button>
@@ -66,6 +78,7 @@ document.getElementById('osForm').addEventListener('submit', async (e) => {
         descricao: document.getElementById('descricao').value,
         setor: document.getElementById('setor').value,
         valor: document.getElementById('valor').value,
+        prazo: document.getElementById('prazo').value || null,
         prioridade: document.getElementById('prioridade').value,
         status: document.getElementById('status').value,
         responsavel: document.getElementById('responsavel').value
@@ -100,8 +113,14 @@ function editarOrdem(os) {
     document.getElementById('status').value = os.status;
     document.getElementById('responsavel').value = os.responsavel || '';
     
-    document.getElementById('formTitle').innerText = 'Editar Ordem de Serviço';
+    // Formata a data para o input type="date" (yyyy-mm-dd)
+    if(os.prazo) {
+        document.getElementById('prazo').value = os.prazo.split('T')[0];
+    } else {
+        document.getElementById('prazo').value = '';
+    }
     
+    document.getElementById('formTitle').innerText = 'Editar Ordem de Serviço';
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 

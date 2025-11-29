@@ -29,7 +29,13 @@
                         <label class="form-label">Valor (R$)</label>
                         <input type="number" id="valor" class="form-control" step="0.01" required>
                     </div>
-                    <div class="col-md-4">
+                    
+                    <div class="col-md-3">
+                        <label class="form-label">Prazo Estimado</label>
+                        <input type="date" id="prazo" class="form-control">
+                    </div>
+
+                    <div class="col-md-3">
                         <label class="form-label">Prioridade</label>
                         <select id="prioridade" class="form-select" required>
                             <option value="baixa">Baixa</option>
@@ -37,7 +43,7 @@
                             <option value="alta">Alta</option>
                         </select>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label class="form-label">Status</label>
                         <select id="status" class="form-select">
                             <option value="aberta">Aberta</option>
@@ -45,7 +51,7 @@
                             <option value="concluída">Concluída</option>
                         </select>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label class="form-label">Responsável</label>
                         <input type="text" id="responsavel" class="form-control">
                     </div>
@@ -61,25 +67,35 @@
             </form>
         </div>
 
-        <div class="row mb-3">
-            <div class="col-md-4">
+        <div class="row mb-3 g-2">
+            <div class="col-md-3">
                 <input type="text" id="buscaTitulo" class="form-control" placeholder="Buscar por título...">
             </div>
             <div class="col-md-3">
+                <input type="text" id="buscaSetor" class="form-control" placeholder="Filtrar por setor...">
+            </div>
+            <div class="col-md-2">
+                <select id="filtroPrioridade" class="form-select">
+                    <option value="">Prioridade (Todas)</option>
+                    <option value="alta">Alta</option>
+                    <option value="média">Média</option>
+                    <option value="baixa">Baixa</option>
+                </select>
+            </div>
+            <div class="col-md-2">
                 <select id="filtroStatus" class="form-select">
-                    <option value="">Todos Status</option>
+                    <option value="">Status (Todos)</option>
                     <option value="aberta">Aberta</option>
                     <option value="em andamento">Em Andamento</option>
                     <option value="concluída">Concluída</option>
                 </select>
             </div>
             <div class="col-md-2">
-                <button class="btn btn-info w-100" onclick="carregarOrdens()">Filtrar</button>
+                <button class="btn btn-info w-100 text-white" onclick="carregarOrdens()">Filtrar</button>
             </div>
         </div>
 
-        <div id="listaOrdens" class="row">
-            </div>
+        <div id="listaOrdens" class="row"></div>
     </div>
 
     <script src="script.js"></script>

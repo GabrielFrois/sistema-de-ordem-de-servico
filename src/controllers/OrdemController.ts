@@ -18,8 +18,11 @@ export const OrdemController = {
             const { status, prioridade, setor, busca } = req.query;
             const filtro: any = {};
 
+            // Filtros exatos
             if (status) filtro.status = status;
             if (prioridade) filtro.prioridade = prioridade;
+            
+            // Filtros parciais
             if (setor) filtro.setor = { $regex: setor, $options: 'i' };
             if (busca) filtro.titulo = { $regex: busca, $options: 'i' };
 
@@ -30,6 +33,7 @@ export const OrdemController = {
         }
     },
 
+    // Read One
     async getById(req: Request, res: Response) {
         try {
             const ordem = await Ordem.findById(req.params.id);
